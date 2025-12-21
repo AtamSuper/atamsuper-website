@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtamSuper EA - Professional Auto Trading Solution</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D9FF;
+            --secondary: #0066FF;
+            --dark: #0A0E1A;
+            --dark-surface: #151B2E;
+            --dark-elevated: #1E2842;
+            --success: #00FF88;
+            --warning: #FFB800;
+            --text: #E8EEFF;
+            --text-dim: #8B95B8;
+            --gradient-primary: linear-gradient(135deg, #00D9FF 0%, #0066FF 100%);
+            --gradient-glow: radial-gradient(circle at 50% 0%, rgba(0, 217, 255, 0.15), transparent 70%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.4;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 217, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 102, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.03) 0%, transparent 50%);
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridScroll 20s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 14, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 0 6rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 80%;
+            background: var(--gradient-glow);
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: 1.4rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .btn {
+            padding: 1.2rem 3rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0, 217, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 217, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+            margin: 4rem 0;
+        }
+
+        .stat-card {
+            background: var(--dark-surface);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--dark-surface);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: -1;
+        }
+
+        .feature-card:hover::after {
+            opacity: 0.05;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 0;
+            background: var(--dark-surface);
+            margin: 4rem 0;
+            border-radius: 40px;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: var(--dark-elevated);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 2px solid rgba(0, 217, 255, 0.1);
+            text-align: center;
+            transition: all 0.4s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 20px 80px rgba(0, 217, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-10px) scale(1.07);
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .plan-price {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .plan-period {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
+        }
+
+        .plan-features li:before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 0.8rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 0;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: var(--dark-surface);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .author-info h4 {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-glow);
+            z-index: -1;
+        }
+
+        .cta-section h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0 2rem;
+            border-top: 1px solid rgba(0, 217, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--dark-elevated);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .features-grid,
+            .pricing-cards,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">AtamSuper EA</div>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#payment-options">Payment</a></li>
+                    <li><a href="#pricing">Products</a></li>
+                    <li><a href="#contact-info">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Automated Trading,<br><span>Maximized Profits</span></h1>
+            <p class="subtitle">Professional Expert Advisors for MetaTrader 5. Trade smarter with advanced algorithms, statistical arbitrage, and intelligent profit protection systems.</p>
+            <div class="cta-buttons">
+                <a href="#payment-options" class="btn btn-primary">Buy Now - Bank Transfer</a>
+                <a href="https://t.me/Free_EA_ASuper" class="btn btn-secondary" target="_blank">Join Telegram Group</a>
+            </div>
+            <p style="margin-top: 2rem; color: var(--text-dim); font-size: 0.95rem;">
+                💳 Accept: Bank Transfer, USDT, Shopee | 📱 Questions? <a href="https://wa.me/6588193923" style="color: var(--primary); text-decoration: none;" target="_blank">WhatsApp</a> or <a href="https://t.me/AtamSuperro" style="color: var(--primary); text-decoration: none;" target="_blank">Telegram</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">29</div>
+                <div class="stat-label">Correlation Pairs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Compatible Brokers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Expert Advisors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Auto Trading</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Features Section - Broker Compatibility -->
+    <section class="features" style="padding: 4rem 0;">
+        <div class="container">
+            <h2 class="section-title">Universal Broker Compatibility</h2>
+            <p class="section-subtitle">Works with ANY MT5 broker - automatically!</p>
+            
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div class="feature-card" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(0, 102, 255, 0.1)); border: 2px solid var(--primary);">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="feature-icon" style="margin: 0 auto 1rem; width: 80px; height: 80px; font-size: 3rem;">🌐</div>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Automatic Broker Suffix Detection</h3>
+                        <p style="color: var(--success); font-weight: 600; font-size: 1.2rem;">✅ Zero Configuration Required - Works Out of the Box!</p>
+                    </div>
+                    
+                    <div style="background: var(--dark); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;">🎯 What This Means for You:</h4>
+                        <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                            Different brokers use different symbol names (EURUSD, EURUSDi, EURUSD.m, EURUSDpro, etc.). 
+                            Our EA <strong style="color: var(--text);">automatically detects</strong> your broker's format on startup and adjusts all 29 trading pairs accordingly.
+                        </p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success);">
+                                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.3rem;">IC Markets</p>
+                                <p style="color: var(--text); font-family: 'JetBrains Mono', monospace;">EURUSDi ✅</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success);">
+                                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.3rem;">FBS</p>
+                                <p style="color: var(--text); font-family: 'JetBrains Mono', monospace;">EURUSD.m ✅</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success);">
+                                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.3rem;">RoboForex</p>
+                                <p style="color: var(--text); font-family: 'JetBrains Mono', monospace;">EURUSDpro ✅</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success);">
+                                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.3rem;">XM / Pepperstone</p>
+                                <p style="color: var(--text); font-family: 'JetBrains Mono', monospace;">EURUSD ✅</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">✅ Benefits:</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>Switch brokers freely - EA adapts automatically</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>No manual configuration needed</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>Works with 100+ MT5 brokers worldwide</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>Plug & play - attach and it works!</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">⚙️ How It Works:</h4>
+                            <ol style="list-style: none; padding: 0; counter-reset: step;">
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start; counter-increment: step;">
+                                    <span style="color: var(--primary); margin-right: 0.8rem; font-weight: 700;">1.</span>
+                                    <span>EA starts up on your MT5</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start; counter-increment: step;">
+                                    <span style="color: var(--primary); margin-right: 0.8rem; font-weight: 700;">2.</span>
+                                    <span>Automatically detects broker suffix</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start; counter-increment: step;">
+                                    <span style="color: var(--primary); margin-right: 0.8rem; font-weight: 700;">3.</span>
+                                    <span>Applies to all 29 trading pairs</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start; counter-increment: step;">
+                                    <span style="color: var(--primary); margin-right: 0.8rem; font-weight: 700;">4.</span>
+                                    <span>Starts trading automatically ✓</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(0, 217, 255, 0.1); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--primary); margin-top: 2rem;">
+                        <p style="color: var(--text); font-weight: 600; margin-bottom: 0.5rem;">💡 What This Means:</p>
+                        <p style="color: var(--text-dim); line-height: 1.8;">
+                            You don't need to worry about broker compatibility! Whether you're using IC Markets, FBS, RoboForex, XM, Pepperstone, Exness, or any other MT5 broker - 
+                            the EA will automatically detect and handle the correct symbol format. <strong style="color: var(--success);">Just attach and trade!</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Powerful Features</h2>
+            <p class="section-subtitle">Everything you need to succeed in automated trading</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Statistical Arbitrage</h3>
+                    <p>Exploit correlation relationships between 29 currency pairs with proven hedge fund strategies and real-time z-score analysis.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Intelligent Profit Protection</h3>
+                    <p>Never give back profits again! Basket Take Profit EA monitors all positions and locks in gains with advanced trailing stop technology.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Universal Broker Compatibility</h3>
+                    <p>Automatic suffix detection works with ANY MT5 broker (IC Markets, FBS, XM, etc.). No configuration needed - just attach and trade!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Continuous Cycle Trading</h3>
+                    <p>Each pair trades independently 24/7. Auto-detects position closes and immediately resets to monitor for new opportunities.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Advanced Risk Management</h3>
+                    <p>Configurable risk per trade, dynamic lot sizing, paired execution with rollback protection, and independent position management.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Real-Time Analytics Dashboard</h3>
+                    <p>Monitor all active positions, cycle completions, performance statistics, and z-scores with clear visual indicators on your chart.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Options Section -->
+    <section id="payment-options" class="features" style="background: var(--dark-surface); padding: 4rem 0; margin: 4rem 0; border-radius: 40px;">
+        <div class="container">
+            <h2 class="section-title">Payment Options</h2>
+            <p class="section-subtitle">Choose your preferred payment method</p>
+            
+            <div class="features-grid">
+                <!-- Bank Transfer - PRIMARY -->
+                <div class="feature-card" style="text-align: center; border: 2px solid var(--primary); position: relative;">
+                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--primary); color: var(--dark); padding: 0.3rem 1rem; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">⭐ RECOMMENDED</div>
+                    <div class="feature-icon" style="margin: 1.5rem auto 1.5rem;">🏦</div>
+                    <h3>Bank Transfer</h3>
+                    <p style="color: var(--text-dim); margin-bottom: 1rem;">Fastest & easiest payment method</p>
+                    <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: left;">
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.5rem;">Bank Name:</p>
+                        <p style="color: var(--text); font-weight: 600; margin-bottom: 1rem;">Bank Islam Malaysia</p>
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.5rem;">Account Number:</p>
+                        <p style="color: var(--primary); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem;">01135020162089</p>
+                    </div>
+                    <div style="background: rgba(0, 217, 255, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <p style="color: var(--success); font-weight: 600; font-size: 0.9rem;">✅ Instant Processing</p>
+                        <p style="color: var(--text-dim); font-size: 0.85rem;">Receive your EA within hours!</p>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-dim);">After payment, WhatsApp proof to<br><a href="https://wa.me/6588193923" style="color: var(--primary); font-weight: 600;" target="_blank">+65 8819 3923</a></p>
+                </div>
+                
+                <!-- USDT Payment - SECONDARY -->
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="margin: 0 auto 1.5rem;">₮</div>
+                    <h3>USDT (Crypto)</h3>
+                    <p style="color: var(--text-dim); margin-bottom: 1rem;">Pay with cryptocurrency</p>
+                    <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; text-align: left;">
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.5rem;">Network:</p>
+                        <p style="color: var(--warning); font-weight: 600; margin-bottom: 1rem;">TRX (Tron TRC20)</p>
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.5rem;">Wallet Address:</p>
+                        <p style="color: var(--primary); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; word-break: break-all; line-height: 1.4;">TMYySCmT3Bbedtt4Q47tH1hxwFH77F77yE</p>
+                    </div>
+                    <button onclick="copyUSDTAddress()" class="btn btn-secondary" style="display: inline-block; margin-bottom: 1rem;">📋 Copy Address</button>
+                    <p style="font-size: 0.85rem; color: var(--text-dim);">After payment, send transaction ID to<br><a href="https://wa.me/6588193923" style="color: var(--primary);" target="_blank">WhatsApp: +65 8819 3923</a></p>
+                </div>
+                
+                <!-- Shopee Payment - ALTERNATIVE -->
+                <div class="feature-card" style="text-align: center; opacity: 0.8;">
+                    <div class="feature-icon" style="margin: 0 auto 1.5rem;">🛒</div>
+                    <h3>Shopee (Alternative)</h3>
+                    <p style="color: var(--warning); margin-bottom: 1rem; font-weight: 600;">⚠️ May have delays</p>
+                    <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+                        <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6;">
+                            Note: Shopee virtual goods shipment may face approval delays. For faster service, use Bank Transfer or USDT.
+                        </p>
+                    </div>
+                    <a href="https://shopee.com.my/shop/14978533" class="btn btn-secondary" target="_blank" style="display: inline-block;">Visit Shopee Store</a>
+                    <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic;">Buyer protection included</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--dark-elevated); border-radius: 16px; border: 1px solid rgba(0, 217, 255, 0.2);">
+                <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;">📝 After Payment</h4>
+                <p style="color: var(--text-dim); line-height: 1.8;">
+                    1. Send payment proof to WhatsApp: <a href="https://wa.me/6588193923" style="color: var(--primary);" target="_blank">+65 8819 3923</a><br>
+                    2. Include: Your MT5 Account Number (for RM50 EA) or Account Name (for RM100 EA)<br>
+                    3. Receive your EA within 24 hours (Bank Transfer: same day!)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Detail Section -->
+    <section class="features" style="background: var(--dark-surface); padding: 6rem 0; margin: 4rem 0; border-radius: 40px;">
+        <div class="container">
+            <h2 class="section-title">What You Get</h2>
+            <p class="section-subtitle">COMBO PACKAGE - Both Expert Advisors included in every purchase!</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 3rem; margin-top: 4rem;">
+                <!-- Statistical Arbitrage EA -->
+                <div style="background: var(--dark-elevated); padding: 3rem; border-radius: 24px; border: 1px solid rgba(0, 217, 255, 0.1);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                        <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">📊</div>
+                        <div>
+                            <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem;">Statistical Arbitrage EA</h3>
+                            <p style="color: var(--success); font-weight: 600; font-size: 1.1rem;">✅ Included in BOTH packages</p>
+                        </div>
+                    </div>
+                    
+                    <p style="color: var(--text-dim); margin-bottom: 2rem; line-height: 1.8;">
+                        Professional multi-pair correlation trading system that exploits statistical relationships between 29 carefully selected currency pairs, commodities, and cryptocurrencies. Based on proven hedge fund strategies.
+                    </p>
+                    
+                    <h4 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--primary);">Key Features:</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>29 optimized correlation pairs (18 positive, 11 negative)</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Real-time z-score analysis and hedge ratio calculation</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Continuous cycle trading - each pair operates independently</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Advanced risk management with configurable settings</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Licensed until February 28, 2026</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Basket Take Profit EA -->
+                <div style="background: var(--dark-elevated); padding: 3rem; border-radius: 24px; border: 1px solid rgba(0, 217, 255, 0.1);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                        <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🎯</div>
+                        <div>
+                            <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem;">Basket Take Profit EA</h3>
+                            <p style="color: var(--success); font-weight: 600; font-size: 1.1rem;">✅ Included in BOTH packages</p>
+                        </div>
+                    </div>
+                    
+                    <p style="color: var(--text-dim); margin-bottom: 2rem; line-height: 1.8;">
+                        The ultimate profit protection system that monitors ALL your open positions and automatically closes them at your target, with intelligent trailing stop technology that locks in gains while letting winners run.
+                    </p>
+                    
+                    <h4 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--primary);">Key Features:</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Intelligent basket management - monitors entire portfolio</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Advanced trailing stop that never moves down</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Automatic profit protection with guaranteed minimum</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Real-time dashboard with visual progress indicators</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Unlimited daily cycles - set it and forget it</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem; padding: 2.5rem; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(0, 102, 255, 0.1)); border-radius: 20px; border: 2px solid var(--primary);">
+                <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 1rem;">🎁 COMBO PACKAGE DEAL</h3>
+                <p style="color: var(--text); font-size: 1.2rem; line-height: 1.8;">
+                    <strong style="color: var(--success);">RM50</strong> = Both EAs (1 Account Number)<br>
+                    <strong style="color: var(--success);">RM100</strong> = Both EAs (Multiple Brokers - Same Name)<br>
+                    <span style="color: var(--warning); font-weight: 700; font-size: 1.3rem;">⚠️ Limited Time Until December 31, 2025!</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <div class="container">
+            <div class="pricing">
+                <h2 class="section-title">Our Expert Advisors</h2>
+                <p class="section-subtitle">Special Combo Package - Get Both EAs Together!</p>
+                
+                <div style="background: var(--warning); color: var(--dark); padding: 1rem 2rem; border-radius: 12px; text-align: center; font-weight: 700; margin-bottom: 3rem; animation: pulse 2s infinite;">
+                    ⚠️ LIMITED TIME OFFER - Valid Until End of December 2025! Price will change from RM to USD in January 2026!
+                </div>
+                
+                <div class="pricing-cards">
+                    <div class="pricing-card featured">
+                        <div style="background: var(--primary); color: var(--dark); padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; margin-bottom: 1rem; font-weight: 700;">🎁 COMBO PACKAGE</div>
+                        <h3 class="plan-name">Single Account License</h3>
+                        <div class="plan-price">RM50</div>
+                        <div class="plan-period">Lock MT5 Account Number</div>
+                        
+                        <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                            <p style="color: var(--success); font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;">✅ You Get BOTH EAs:</p>
+                            <p style="color: var(--text); margin-bottom: 0.5rem;">1️⃣ Statistical Arbitrage EA</p>
+                            <p style="color: var(--text);">2️⃣ Basket Take Profit EA</p>
+                        </div>
+                        
+                        <ul class="plan-features">
+                            <li>Limited to 1 MT5 Account Number</li>
+                            <li>Works on 1 broker only</li>
+                            <li>Both EAs included in package</li>
+                            <li>29 Correlation Pairs (StatArb)</li>
+                            <li>Intelligent Profit Protection (Basket)</li>
+                            <li>Licensed Until Feb 2026</li>
+                            <li>Email Support Included</li>
+                        </ul>
+                        <a href="#payment-options" class="btn btn-primary">Choose Payment Method</a>
+                    </div>
+                    
+                    <div class="pricing-card featured" style="border: 3px solid var(--primary); transform: scale(1.05);">
+                        <div style="background: var(--gradient-primary); color: white; padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; margin-bottom: 1rem; font-weight: 700;">⭐ BEST VALUE - COMBO PACKAGE</div>
+                        <h3 class="plan-name">Multi-Account License</h3>
+                        <div class="plan-price">RM100</div>
+                        <div class="plan-period">Lock MT5 Account Name</div>
+                        
+                        <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                            <p style="color: var(--success); font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;">✅ You Get BOTH EAs:</p>
+                            <p style="color: var(--text); margin-bottom: 0.5rem;">1️⃣ Statistical Arbitrage EA</p>
+                            <p style="color: var(--text); margin-bottom: 1rem;">2️⃣ Basket Take Profit EA</p>
+                            <p style="color: var(--primary); font-weight: 600;">🎯 Use on MULTIPLE brokers with same registered name!</p>
+                        </div>
+                        
+                        <ul class="plan-features">
+                            <li>Use on Multiple Brokers</li>
+                            <li>Same MT5 Account Name Required</li>
+                            <li>Both EAs included in package</li>
+                            <li>Unlimited MT5 Accounts (same name)</li>
+                            <li>29 Correlation Pairs (StatArb)</li>
+                            <li>Intelligent Profit Protection (Basket)</li>
+                            <li>Licensed Until Feb 2026</li>
+                            <li>Priority Email Support</li>
+                        </ul>
+                        <a href="#payment-options" class="btn btn-primary" style="background: linear-gradient(135deg, #FFB800 0%, #FF6B00 100%); box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);">Choose Payment Method - BEST VALUE</a>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--dark-elevated); border-radius: 16px; border: 2px solid var(--warning);">
+                    <h4 style="color: var(--warning); margin-bottom: 1rem; font-size: 1.3rem;">⏰ URGENT: Price Increase Coming January 2026!</h4>
+                    <p style="color: var(--text); line-height: 1.8; font-size: 1.1rem;">
+                        Current prices in <strong style="color: var(--primary);">Malaysian Ringgit (RM)</strong> are available only until <strong style="color: var(--warning);">December 31, 2025</strong>.<br>
+                        Starting January 2026, all prices will be in <strong style="color: var(--warning);">USD</strong> and will be significantly higher.<br>
+                        <strong style="color: var(--success); font-size: 1.2rem;">Lock in your RM price TODAY and save!</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Our Traders Say</h2>
+            <p class="section-subtitle">Join satisfied traders using our Expert Advisors</p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The Statistical Arbitrage EA transformed my trading. The correlation analysis is spot-on and I love that it trades multiple pairs independently. Consistent profits every week!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JD</div>
+                        <div class="author-info">
+                            <h4>John Davis</h4>
+                            <p>Professional Trader</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The Basket Take Profit EA saved my trading career. I was hitting good profits then giving them back. Now I lock in gains automatically every day. Best investment ever!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SC</div>
+                        <div class="author-info">
+                            <h4>Sarah Chen</h4>
+                            <p>Forex Investor</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Setup was incredibly easy for both EAs. The trailing stop feature is genius - captured RM250 profit when market reversed. Without it, I would have gotten nothing!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <h4>Michael Roberts</h4>
+                            <p>Algorithmic Trader</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information Section -->
+    <section id="contact-info" class="features" style="padding: 4rem 0;">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <p class="section-subtitle">Have questions? Contact us for enquiries and support</p>
+            
+            <div class="features-grid" style="max-width: 900px; margin: 3rem auto;">
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="margin: 0 auto 1.5rem;">💬</div>
+                    <h3>WhatsApp</h3>
+                    <p style="margin-bottom: 1.5rem;">Direct message for instant support</p>
+                    <a href="https://wa.me/6588193923" class="btn btn-primary" target="_blank" style="display: inline-block;">+65 8819 3923</a>
+                </div>
+                
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="margin: 0 auto 1.5rem;">📱</div>
+                    <h3>Telegram Personal</h3>
+                    <p style="margin-bottom: 1.5rem;">Message me directly for enquiries</p>
+                    <a href="https://t.me/AtamSuperro" class="btn btn-primary" target="_blank" style="display: inline-block;">@AtamSuperro</a>
+                </div>
+                
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="margin: 0 auto 1.5rem;">👥</div>
+                    <h3>Telegram Group</h3>
+                    <p style="margin-bottom: 1.5rem;">Join our community of traders</p>
+                    <a href="https://t.me/Free_EA_ASuper" class="btn btn-secondary" target="_blank" style="display: inline-block;">Join Public Group</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Automate Your Trading?</h2>
+            <p>Get BOTH EAs in our combo package - Pay via Bank Transfer for fastest delivery!</p>
+            <a href="#payment-options" class="btn btn-primary">Choose Payment Method</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AtamSuper EA</h3>
+                    <p>Professional automated trading solutions for modern traders.</p>
+                    <div class="social-links">
+                        <a href="https://t.me/Free_EA_AtamSuper" target="_blank" title="Telegram Channel">📱</a>
+                        <a href="https://shopee.com.my/shop/14978533" target="_blank" title="Shopee">🛒</a>
+                        <a href="https://wa.me/6588193923" target="_blank" title="WhatsApp">💬</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><a href="https://wa.me/6588193923" target="_blank">WhatsApp: +65 8819 3923</a></li>
+                        <li><a href="https://t.me/AtamSuperro" target="_blank">Telegram: @AtamSuperro</a></li>
+                        <li><a href="https://t.me/Free_EA_ASuper" target="_blank">Join Public Group</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Product</h3>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="https://t.me/Free_EA_ASuper" target="_blank">Telegram Public Group</a></li>
+                        <li><a href="https://wa.me/6588193923" target="_blank">WhatsApp Support</a></li>
+                        <li><a href="https://t.me/AtamSuperro" target="_blank">Direct Message</a></li>
+                        <li><a href="#pricing">Product Information</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Risk Disclaimer</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 AtamSuper EA. All rights reserved. Trading involves risk and may not be suitable for all investors.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Copy USDT address function
+        function copyUSDTAddress() {
+            const address = 'TMYySCmT3Bbedtt4Q47tH1hxwFH77F77yE';
+            navigator.clipboard.writeText(address).then(function() {
+                alert('✅ USDT Address Copied!\n\n' + address + '\n\nNetwork: TRX (Tron TRC20)');
+            }, function(err) {
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = address;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ USDT Address Copied!\n\n' + address + '\n\nNetwork: TRX (Tron TRC20)');
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        let lastScroll = 0;
+        const header = document.querySelector('header');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.style.background = 'rgba(10, 14, 26, 0.95)';
+            } else {
+                header.style.background = 'rgba(10, 14, 26, 0.8)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .pricing-card, .testimonial-card, .stat-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
