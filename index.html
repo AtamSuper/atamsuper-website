@@ -1,0 +1,2219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtamSuper EA - Professional Auto Trading Solution</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00D9FF;
+            --secondary: #0066FF;
+            --dark: #0A0E1A;
+            --dark-surface: #151B2E;
+            --dark-elevated: #1E2842;
+            --success: #00FF88;
+            --warning: #FFB800;
+            --text: #E8EEFF;
+            --text-dim: #8B95B8;
+            --gradient-primary: linear-gradient(135deg, #00D9FF 0%, #0066FF 100%);
+            --gradient-glow: radial-gradient(circle at 50% 0%, rgba(0, 217, 255, 0.15), transparent 70%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.4;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 217, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 102, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.03) 0%, transparent 50%);
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridScroll 20s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 14, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 0 6rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 80%;
+            background: var(--gradient-glow);
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: 1.4rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .btn {
+            padding: 1.2rem 3rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0, 217, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 217, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+            margin: 4rem 0;
+        }
+
+        .stat-card {
+            background: var(--dark-surface);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(0, 217, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--dark-surface);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: -1;
+        }
+
+        .feature-card:hover::after {
+            opacity: 0.05;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 0;
+            background: var(--dark-surface);
+            margin: 4rem 0;
+            border-radius: 40px;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: var(--dark-elevated);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 2px solid rgba(0, 217, 255, 0.1);
+            text-align: center;
+            transition: all 0.4s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 20px 80px rgba(0, 217, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-10px) scale(1.07);
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .plan-price {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .plan-period {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
+        }
+
+        .plan-features li:before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 0.8rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 0;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: var(--dark-surface);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .author-info h4 {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .author-info p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-glow);
+            z-index: -1;
+        }
+
+        .cta-section h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0 2rem;
+            border-top: 1px solid rgba(0, 217, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-dim);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--dark-elevated);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .features-grid,
+            .pricing-cards,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">AtamSuper EA</div>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#demo-version">Free Demo</a></li>
+                    <li><a href="#payment-options">Payment</a></li>
+                    <li><a href="#pricing">Products</a></li>
+                    <li><a href="#contact-info">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Elliott Wave Pattern Trading,<br><span>Automated & Profitable</span></h1>
+            <p class="subtitle">🌊 NEW: Professional Elliott Wave EA for MetaTrader 5. Trade the most powerful Wave 3 patterns with proven Elliott Wave Theory - fully automated with 161.8% Fibonacci extensions!</p>
+            <div class="cta-buttons">
+                <a href="#elliott-wave-ea" class="btn btn-primary">Discover Elliott Wave EA</a>
+                <a href="#demo-version" class="btn btn-secondary">Try FREE Demo First</a>
+            </div>
+            <p style="margin-top: 2rem; color: var(--text-dim); font-size: 0.95rem;">
+                🎁 FREE Demo Available | 💳 Starting from RM50 | 📱 Questions? <a href="https://wa.me/6588193923" style="color: var(--primary); text-decoration: none;" target="_blank">WhatsApp</a> or <a href="https://t.me/AtamSuperro" style="color: var(--primary); text-decoration: none;" target="_blank">Telegram</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="container">
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Expert Advisors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Compatible Brokers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">29</div>
+                <div class="stat-label">Correlation Pairs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Auto Trading</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Elliott Wave EA - Primary Product Section -->
+    <section id="elliott-wave-ea" class="features" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(0, 102, 255, 0.05)); padding: 5rem 0; margin: 3rem 0;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <div style="display: inline-block; background: linear-gradient(135deg, #00D9FF 0%, #0066FF 100%); color: white; padding: 0.6rem 2rem; border-radius: 30px; font-weight: 700; margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    🌊 FEATURED PRODUCT - NEW RELEASE
+                </div>
+                <h2 class="section-title" style="font-size: 3rem; margin-bottom: 1rem;">Elliott Wave ABC Reversal EA</h2>
+                <p class="section-subtitle" style="font-size: 1.3rem;">Trade the Most Powerful Wave 3 Patterns with Proven Elliott Wave Theory</p>
+            </div>
+            
+            <div style="max-width: 1100px; margin: 0 auto;">
+                <div class="feature-card" style="background: var(--dark-surface); border: 3px solid var(--primary); padding: 3rem;">
+                    
+                    <h3 style="color: var(--primary); font-size: 2rem; margin-bottom: 2rem; text-align: center;">🏆 Why Elliott Wave Trading?</h3>
+                    <p style="color: var(--text); line-height: 1.8; margin-bottom: 2rem; font-size: 1.1rem; text-align: center;">
+                        Elliott Wave Theory has been used by professional traders for decades. Wave 3 is statistically <strong style="color: var(--success);">the most profitable and reliable wave pattern</strong>, often extending to 161.8% of Wave 1.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                        <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--success);">
+                            <h5 style="color: var(--success); margin-bottom: 0.5rem; font-size: 1.1rem;">✅ 5-Wave Impulse Detection</h5>
+                            <p style="color: var(--text-dim); font-size: 0.95rem;">Automatically identifies complete Elliott Wave patterns with precision</p>
+                        </div>
+                        
+                        <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--success);">
+                            <h5 style="color: var(--success); margin-bottom: 0.5rem; font-size: 1.1rem;">✅ Wave 3 Focus Strategy</h5>
+                            <p style="color: var(--text-dim); font-size: 0.95rem;">Trades only the strongest, most profitable wave (161.8% Fibonacci extension)</p>
+                        </div>
+                        
+                        <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--success);">
+                            <h5 style="color: var(--success); margin-bottom: 0.5rem; font-size: 1.1rem;">✅ 200 MA Trend Filter</h5>
+                            <p style="color: var(--text-dim); font-size: 0.95rem;">Only trades Wave 3 signals aligned with the major trend direction</p>
+                        </div>
+                        
+                        <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--success);">
+                            <h5 style="color: var(--success); margin-bottom: 0.5rem; font-size: 1.1rem;">✅ Works All Timeframes</h5>
+                            <p style="color: var(--text-dim); font-size: 0.95rem;">From M15 to D1 - perfect for day traders and swing traders</p>
+                        </div>
+                        
+                        <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--success);">
+                            <h5 style="color: var(--success); margin-bottom: 0.5rem; font-size: 1.1rem;">✅ Dynamic Risk Management</h5>
+                            <p style="color: var(--text-dim); font-size: 0.95rem;">Automatic position sizing based on account balance and risk percentage</p>
+                        </div>
+                        
+                        <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--success);">
+                            <h5 style="color: var(--success); margin-bottom: 0.5rem; font-size: 1.1rem;">✅ Fibonacci Precision</h5>
+                            <p style="color: var(--text-dim); font-size: 0.95rem;">Uses 38.2%-61.8% Wave 2 retracement for optimal entry points</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(0, 217, 255, 0.1); padding: 2rem; border-radius: 16px; border: 2px solid var(--primary); text-align: center;">
+                        <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.5rem;">📈 Wave 3 Trading Strategy</h4>
+                        <p style="color: var(--text); line-height: 1.8; margin-bottom: 1.5rem;">
+                            The EA waits for Wave 1 to complete, then monitors for a 38.2-61.8% retracement (Wave 2). When price breaks beyond Wave 1's high/low, it enters the trade targeting the powerful Wave 3 movement - typically 1.618x the size of Wave 1.
+                        </p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                            <div>
+                                <div style="font-size: 2.5rem; color: var(--success); margin-bottom: 0.5rem;">161.8%</div>
+                                <p style="color: var(--text-dim);">Fibonacci Extension</p>
+                            </div>
+                            <div>
+                                <div style="font-size: 2.5rem; color: var(--success); margin-bottom: 0.5rem;">H1-H4</div>
+                                <p style="color: var(--text-dim);">Best Timeframes</p>
+                            </div>
+                            <div>
+                                <div style="font-size: 2.5rem; color: var(--success); margin-bottom: 0.5rem;">2:1</div>
+                                <p style="color: var(--text-dim);">Risk:Reward Ratio</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 3rem;">
+                        <h4 style="color: var(--warning); margin-bottom: 1.5rem; font-size: 1.3rem;">💰 Starting from RM50</h4>
+                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <a href="#pricing" class="btn btn-primary" style="background: linear-gradient(135deg, #FFB800 0%, #FF6B00 100%); box-shadow: 0 10px 40px rgba(255, 184, 0, 0.4);">See Pricing Options</a>
+                            <a href="#demo-version" class="btn btn-secondary">Try FREE Demo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Universal Broker Compatibility -->
+    <section class="features" style="padding: 4rem 0;">
+        <div class="container">
+            <h2 class="section-title">Universal Broker Compatibility</h2>
+            <p class="section-subtitle">Works with ANY MT5 broker - automatically!</p>
+            
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div class="feature-card" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(0, 102, 255, 0.1)); border: 2px solid var(--primary);">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="feature-icon" style="margin: 0 auto 1rem; width: 80px; height: 80px; font-size: 3rem;">🌐</div>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Automatic Broker Suffix Detection</h3>
+                        <p style="color: var(--success); font-weight: 600; font-size: 1.2rem;">✅ Zero Configuration Required - Works Out of the Box!</p>
+                    </div>
+                    
+                    <div style="background: var(--dark); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;">🎯 What This Means for You:</h4>
+                        <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                            Different brokers use different symbol names (EURUSD, EURUSDi, EURUSD.m, EURUSDpro, etc.). 
+                            Our EA <strong style="color: var(--text);">automatically detects</strong> your broker's format on startup and adjusts all 29 trading pairs accordingly.
+                        </p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success);">
+                                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.3rem;">IC Markets</p>
+                                <p style="color: var(--text); font-family: 'JetBrains Mono', monospace;">EURUSDi ✅</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success);">
+                                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.3rem;">FBS</p>
+                                <p style="color: var(--text); font-family: 'JetBrains Mono', monospace;">EURUSD.m ✅</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success);">
+                                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.3rem;">RoboForex</p>
+                                <p style="color: var(--text); font-family: 'JetBrains Mono', monospace;">EURUSDpro ✅</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--success);">
+                                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.3rem;">XM / Pepperstone</p>
+                                <p style="color: var(--text); font-family: 'JetBrains Mono', monospace;">EURUSD ✅</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">✅ Benefits:</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>Switch brokers freely - EA adapts automatically</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>No manual configuration needed</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>Works with 100+ MT5 brokers worldwide</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>Plug & play - attach and it works!</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">⚙️ How It Works:</h4>
+                            <ol style="list-style: none; padding: 0; counter-reset: step;">
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start; counter-increment: step;">
+                                    <span style="color: var(--primary); margin-right: 0.8rem; font-weight: 700;">1.</span>
+                                    <span>EA starts up on your MT5</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start; counter-increment: step;">
+                                    <span style="color: var(--primary); margin-right: 0.8rem; font-weight: 700;">2.</span>
+                                    <span>Automatically detects broker suffix</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start; counter-increment: step;">
+                                    <span style="color: var(--primary); margin-right: 0.8rem; font-weight: 700;">3.</span>
+                                    <span>Applies to all 29 trading pairs</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start; counter-increment: step;">
+                                    <span style="color: var(--primary); margin-right: 0.8rem; font-weight: 700;">4.</span>
+                                    <span>Starts trading automatically ✓</span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(0, 217, 255, 0.1); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--primary); margin-top: 2rem;">
+                        <p style="color: var(--text); font-weight: 600; margin-bottom: 0.5rem;">💡 What This Means:</p>
+                        <p style="color: var(--text-dim); line-height: 1.8;">
+                            You don't need to worry about broker compatibility! Whether you're using IC Markets, FBS, RoboForex, XM, Pepperstone, Exness, or any other MT5 broker - 
+                            the EA will automatically detect and handle the correct symbol format. <strong style="color: var(--success);">Just attach and trade!</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommended Broker Section -->
+    <section class="features" style="background: var(--dark-surface); padding: 4rem 0; margin: 4rem 0; border-radius: 40px;">
+        <div class="container">
+            <h2 class="section-title">Recommended Broker Partner</h2>
+            <p class="section-subtitle">Get the best trading experience with our tested and approved broker</p>
+            
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <div class="feature-card" style="background: linear-gradient(135deg, rgba(255, 0, 76, 0.1), rgba(0, 217, 255, 0.1)); border: 2px solid var(--primary); position: relative;">
+                    <div style="position: absolute; top: -15px; right: 20px; background: var(--success); color: var(--dark); padding: 0.5rem 1.5rem; border-radius: 20px; font-weight: 700; font-size: 0.9rem;">✅ EA TESTED & APPROVED</div>
+                    
+                    <div style="text-align: center; margin-bottom: 2rem; padding-top: 2rem;">
+                        <h3 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem;">
+                            <span style="color: #FF004C;">TICK</span><span style="color: var(--primary);">MILL</span>
+                        </h3>
+                        <p style="color: var(--text-dim); font-size: 1.1rem;">Your Trusted Trading Partner Since 2014</p>
+                    </div>
+                    
+                    <div style="background: var(--dark); padding: 2rem; border-radius: 16px; margin-bottom: 2rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 1.5rem; text-align: center; font-size: 1.3rem;">🏆 Why Choose Tickmill for Our EAs?</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+                            <div>
+                                <h5 style="color: var(--success); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.5rem;">✅</span>
+                                    <span>Fully EA Tested</span>
+                                </h5>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Both EAs extensively tested on Tickmill</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Proven compatibility with all 29 correlation pairs</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Automatic suffix detection works perfectly</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h5 style="color: var(--success); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.5rem;">💰</span>
+                                    <span>Ultra-Low Spreads</span>
+                                </h5>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>EURUSD from 0.0 pips (raw spread)</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Perfect for high-frequency correlation trading</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Maximize EA profitability with low costs</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h5 style="color: var(--success); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.5rem;">🎯</span>
+                                    <span>Multiple Account Types</span>
+                                </h5>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Pro Account: From $100 deposit</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Classic Account: Perfect for beginners</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>VIP Account: Premium trading conditions</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h5 style="color: var(--success); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.5rem;">⚡</span>
+                                    <span>Lightning Execution</span>
+                                </h5>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Ultra-fast order execution (avg 0.06s)</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Essential for Statistical Arbitrage EA</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>99.9% uptime guarantee</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h5 style="color: var(--success); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.5rem;">🛡️</span>
+                                    <span>Regulated & Secure</span>
+                                </h5>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>FCA, CySEC, FSA regulated</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Client funds protected up to £85,000</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Segregated client accounts</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div>
+                                <h5 style="color: var(--success); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.5rem;">🎁</span>
+                                    <span>Exclusive Benefits</span>
+                                </h5>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Trade 500+ instruments</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>Free VPS for qualifying accounts</span>
+                                    </li>
+                                    <li style="padding: 0.4rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                        <span style="color: var(--primary); margin-right: 0.5rem;">•</span>
+                                        <span>24/7 multilingual support</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(0, 217, 255, 0.1); padding: 2rem; border-radius: 12px; border-left: 4px solid var(--primary); margin-bottom: 2rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 1rem;">💡 Why This Broker Works Best with Our EAs:</h4>
+                        <p style="color: var(--text); line-height: 1.8; margin-bottom: 1rem;">
+                            We've tested our Statistical Arbitrage EA and Basket Take Profit EA extensively on Tickmill. The combination of ultra-low spreads, fast execution, and reliable infrastructure makes it the <strong style="color: var(--success);">perfect environment for automated trading</strong>.
+                        </p>
+                        <p style="color: var(--text-dim); line-height: 1.8;">
+                            The low spreads are particularly important for correlation trading, where you're opening multiple simultaneous positions. Every pip saved on spread is extra profit in your pocket!
+                        </p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <p style="color: var(--text); font-size: 1.1rem; margin-bottom: 1.5rem; font-weight: 600;">
+                            🎯 Open Account with IB Code: <span style="color: var(--primary); font-family: 'JetBrains Mono', monospace; font-size: 1.2rem;">IB64141013</span>
+                        </p>
+                        <a href="https://secure.tickmill.sc?utm_campaign=ib_link&utm_content=IB64141013&utm_medium=Open+Account&utm_source=link&lp=https%3A%2F%2Fsecure.tickmill.sc%2Fen%2Fsign-up" class="btn btn-primary" target="_blank" rel="nofollow" style="font-size: 1.2rem; padding: 1.3rem 3rem;">
+                            🚀 Open Tickmill Account Now
+                        </a>
+                        <p style="color: var(--text-dim); margin-top: 1rem; font-size: 0.9rem;">
+                            Use our IB code for potential rebates and support
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 184, 0, 0.1); border-radius: 8px; border: 1px solid var(--warning);">
+                        <p style="color: var(--text-dim); font-size: 0.85rem; text-align: center; margin: 0;">
+                            <strong style="color: var(--warning);">Note:</strong> While we recommend Tickmill based on our testing, our EAs work with ANY MT5 broker thanks to automatic suffix detection. Choose the broker that suits you best!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Powerful Features</h2>
+            <p class="section-subtitle">Everything you need to succeed in automated trading</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Statistical Arbitrage</h3>
+                    <p>Exploit correlation relationships between 29 currency pairs with proven hedge fund strategies and real-time z-score analysis.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Intelligent Profit Protection</h3>
+                    <p>Never give back profits again! Basket Take Profit EA monitors all positions and locks in gains with advanced trailing stop technology.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Universal Broker Compatibility</h3>
+                    <p>Automatic suffix detection works with ANY MT5 broker (IC Markets, FBS, XM, etc.). No configuration needed - just attach and trade!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Continuous Cycle Trading</h3>
+                    <p>Each pair trades independently 24/7. Auto-detects position closes and immediately resets to monitor for new opportunities.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Advanced Risk Management</h3>
+                    <p>Configurable risk per trade, dynamic lot sizing, paired execution with rollback protection, and independent position management.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Real-Time Analytics Dashboard</h3>
+                    <p>Monitor all active positions, cycle completions, performance statistics, and z-scores with clear visual indicators on your chart.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intelligent Lot Calculation Section -->
+    <section class="features" style="padding: 4rem 0;">
+        <div class="container">
+            <h2 class="section-title">🏆 Intelligent Lot Calculation System</h2>
+            <p class="section-subtitle">Advanced risk management adapted to each instrument's volatility</p>
+            
+            <div style="max-width: 1100px; margin: 0 auto;">
+                <div class="feature-card" style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 217, 255, 0.1)); border: 2px solid var(--success);">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="feature-icon" style="margin: 0 auto 1rem; width: 80px; height: 80px; font-size: 3rem;">🛡️</div>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Complete Solution Applied</h3>
+                        <p style="color: var(--text-dim); font-size: 1.1rem;">Our EA automatically adjusts lot sizes and risk parameters based on instrument type and volatility</p>
+                    </div>
+                    
+                    <div style="background: var(--dark); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; overflow-x: auto;">
+                        <h4 style="color: var(--primary); margin-bottom: 1.5rem; text-align: center;">📊 New Intelligent Lot Calculation</h4>
+                        
+                        <table style="width: 100%; border-collapse: collapse; color: var(--text);">
+                            <thead>
+                                <tr style="background: var(--dark-elevated);">
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary); color: var(--primary); font-weight: 700;">Instrument</th>
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary); color: var(--primary); font-weight: 700;">Price Range</th>
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary); color: var(--primary); font-weight: 700;">Stop Loss</th>
+                                    <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary); color: var(--primary); font-weight: 700;">Max Lot Cap</th>
+                                    <th style="padding: 1rem; text-align: center; border-bottom: 2px solid var(--primary); color: var(--primary); font-weight: 700;">Safety Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-weight: 600;">
+                                        <span style="color: var(--text);">💱 Forex</span>
+                                    </td>
+                                    <td style="padding: 1rem; color: var(--text-dim);">$1-2</td>
+                                    <td style="padding: 1rem;">
+                                        <span style="color: var(--text);">50 pips</span>
+                                    </td>
+                                    <td style="padding: 1rem;">
+                                        <span style="color: var(--text);">Normal</span>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: center;">
+                                        <span style="background: rgba(0, 255, 136, 0.2); color: var(--success); padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">✓ Safe</span>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-weight: 600;">
+                                        <span style="color: var(--warning);">🏆 Gold (XAUUSD)</span>
+                                    </td>
+                                    <td style="padding: 1rem; color: var(--text-dim);">$2,000-2,700</td>
+                                    <td style="padding: 1rem;">
+                                        <span style="color: var(--warning);">$15</span>
+                                    </td>
+                                    <td style="padding: 1rem;">
+                                        <span style="color: var(--warning); font-weight: 700;">1.0 lot</span>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: center;">
+                                        <span style="background: rgba(0, 255, 136, 0.3); color: var(--success); padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">✓✓ Very Safe</span>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-weight: 600;">
+                                        <span style="color: var(--primary);">₿ Crypto (BTC)</span>
+                                    </td>
+                                    <td style="padding: 1rem; color: var(--text-dim);">$60,000+</td>
+                                    <td style="padding: 1rem;">
+                                        <span style="color: var(--primary);">1% dynamic</span>
+                                    </td>
+                                    <td style="padding: 1rem;">
+                                        <span style="color: var(--primary); font-weight: 700;">0.10 lot</span>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: center;">
+                                        <span style="background: rgba(0, 255, 136, 0.4); color: var(--success); padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">✓✓✓ Ultra Safe</span>
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-weight: 600;">
+                                        <span style="color: var(--text);">📈 Indices</span>
+                                    </td>
+                                    <td style="padding: 1rem; color: var(--text-dim);">$15,000+</td>
+                                    <td style="padding: 1rem;">
+                                        <span style="color: var(--text);">100 points</span>
+                                    </td>
+                                    <td style="padding: 1rem;">
+                                        <span style="color: var(--text);">Normal</span>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: center;">
+                                        <span style="background: rgba(0, 255, 136, 0.3); color: var(--success); padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">✓✓ Very Safe</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 1rem; font-weight: 600;">
+                                        <span style="color: var(--text);">🛢️ Oil</span>
+                                    </td>
+                                    <td style="padding: 1rem; color: var(--text-dim);">$70-90</td>
+                                    <td style="padding: 1rem;">
+                                        <span style="color: var(--text);">$2.00</span>
+                                    </td>
+                                    <td style="padding: 1rem;">
+                                        <span style="color: var(--text);">Normal</span>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: center;">
+                                        <span style="background: rgba(0, 255, 136, 0.2); color: var(--success); padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">✓ Safe</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                        <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--primary);">
+                            <h5 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.1rem;">🎯 Smart Adaptation</h5>
+                            <p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.7;">
+                                The EA automatically recognizes each instrument type and applies appropriate risk parameters. No manual configuration needed!
+                            </p>
+                        </div>
+                        
+                        <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--success);">
+                            <h5 style="color: var(--success); margin-bottom: 1rem; font-size: 1.1rem;">🛡️ Multi-Layer Protection</h5>
+                            <p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.7;">
+                                Gold capped at 1.0 lot, Bitcoin at 0.10 lot to prevent over-exposure on high-volatility instruments. Your capital is protected!
+                            </p>
+                        </div>
+                        
+                        <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--warning);">
+                            <h5 style="color: var(--warning); margin-bottom: 1rem; font-size: 1.1rem;">⚡ Dynamic Adjustments</h5>
+                            <p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.7;">
+                                Stop loss levels automatically adjust based on price range and volatility. Optimal protection for every market condition.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(0, 217, 255, 0.1); padding: 2rem; border-radius: 12px; border: 1px solid var(--primary);">
+                        <h4 style="color: var(--primary); margin-bottom: 1rem; text-align: center;">💡 Why This Matters</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                            <div>
+                                <p style="color: var(--text); font-weight: 600; margin-bottom: 0.5rem;">✅ Prevents Over-Trading</p>
+                                <p style="color: var(--text-dim); font-size: 0.9rem;">Lot caps on volatile instruments like Gold and Bitcoin prevent excessive risk exposure</p>
+                            </div>
+                            <div>
+                                <p style="color: var(--text); font-weight: 600; margin-bottom: 0.5rem;">✅ Optimizes Returns</p>
+                                <p style="color: var(--text-dim); font-size: 0.9rem;">Each instrument trades with parameters that maximize profitability while controlling risk</p>
+                            </div>
+                            <div>
+                                <p style="color: var(--text); font-weight: 600; margin-bottom: 0.5rem;">✅ Set and Forget</p>
+                                <p style="color: var(--text-dim); font-size: 0.9rem;">No manual calculations needed - EA handles everything automatically based on instrument type</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Elliott Wave Advanced Features Section -->
+    <section class="features" style="padding: 4rem 0;">
+        <div class="container">
+            <h2 class="section-title">🛡️ Elliott Wave EA - Advanced Protection Features</h2>
+            <p class="section-subtitle">Exclusive built-in news filter protects your account during high-impact events</p>
+            
+            <div style="max-width: 1100px; margin: 0 auto;">
+                <div class="feature-card" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(0, 102, 255, 0.1)); border: 2px solid var(--primary);">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="feature-icon" style="margin: 0 auto 1rem; width: 80px; height: 80px; font-size: 3rem;">🛡️</div>
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Integrated High-Impact News Filter</h3>
+                        <p style="color: var(--success); font-weight: 600; font-size: 1.2rem;">✅ Full Version ONLY - Not Available in Demo!</p>
+                    </div>
+                    
+                    <div style="background: var(--dark); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 1.5rem; text-align: center;">🎯 What Makes This Special?</h4>
+                        <p style="color: var(--text-dim); line-height: 1.8; text-align: center; margin-bottom: 2rem;">
+                            Our Elliott Wave EA includes a sophisticated news filter that automatically monitors and responds to high-impact economic news events. 
+                            This feature protects your trading account from the extreme volatility that occurs during major news releases like NFP, FOMC, GDP, and CPI data.
+                        </p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                            <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--success);">
+                                <h5 style="color: var(--success); margin-bottom: 1rem; font-size: 1.1rem;">🤖 Fully Automatic</h5>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ Auto-fetches news from FXStreet.com</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ Automatic GMT offset detection</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ Works with ANY broker worldwide</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ Zero manual configuration needed</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--primary);">
+                                <h5 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.1rem;">⏰ Smart Timing Control</h5>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ Stops trading 30 min before news</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ Resumes 30 min after news</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ Optional auto-close positions</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ Configurable time windows</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--warning);">
+                                <h5 style="color: var(--warning); margin-bottom: 1rem; font-size: 1.1rem;">📊 Visual Feedback</h5>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ News events display on chart</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ Auto-trading status indicator</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ Countdown to next news event</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">✓ GMT and broker time shown</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Comparison Table -->
+                    <div style="background: var(--dark-elevated); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 1.5rem; text-align: center;">📊 Demo vs Full Version Comparison</h4>
+                        
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; color: var(--text);">
+                                <thead>
+                                    <tr style="background: var(--dark);">
+                                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary); color: var(--primary); font-weight: 700;">Feature</th>
+                                        <th style="padding: 1rem; text-align: center; border-bottom: 2px solid var(--primary); color: var(--warning); font-weight: 700;">Demo Version</th>
+                                        <th style="padding: 1rem; text-align: center; border-bottom: 2px solid var(--primary); color: var(--success); font-weight: 700;">Full Version</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                        <td style="padding: 1rem; font-weight: 600;">High-Impact News Filter</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--warning);">❌ NOT Included</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--success);">✅ Fully Integrated</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                        <td style="padding: 1rem; font-weight: 600;">Auto News Detection</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--warning);">❌ Manual Only</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--success);">✅ Automatic</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                        <td style="padding: 1rem; font-weight: 600;">Protection During NFP, FOMC</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--warning);">❌ No Protection</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--success);">✅ Auto-Protected</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                        <td style="padding: 1rem; font-weight: 600;">Auto Trading Pause</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--warning);">❌ Trades During News</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--success);">✅ Auto Pause/Resume</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                        <td style="padding: 1rem; font-weight: 600;">Volatility Risk Level</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--warning); font-weight: 700;">HIGH ⚠️</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--success); font-weight: 700;">LOW ✅</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                        <td style="padding: 1rem; font-weight: 600;">Account Protection</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--warning);">Basic</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--success);">Advanced</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 1rem; font-weight: 600;">Suitable For</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--text-dim);">Testing Only</td>
+                                        <td style="padding: 1rem; text-align: center; color: var(--success);">Live Trading</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Real-World Example -->
+                    <div style="background: rgba(255, 184, 0, 0.1); padding: 2rem; border-radius: 12px; border-left: 4px solid var(--warning); margin-bottom: 2rem;">
+                        <h4 style="color: var(--warning); margin-bottom: 1rem;">💡 Real-World Example: NFP Friday</h4>
+                        <p style="color: var(--text); line-height: 1.8; margin-bottom: 1rem;">
+                            <strong>Scenario:</strong> Non-Farm Payrolls (NFP) releases at 13:30 GMT (15:30 broker time with GMT+2)
+                        </p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                            <div style="background: rgba(255, 0, 0, 0.1); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255, 0, 0, 0.3);">
+                                <h5 style="color: #ff6b6b; margin-bottom: 1rem;">❌ Demo Version (No Filter)</h5>
+                                <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.7;">
+                                    <strong>15:00</strong> - EA still trading ⚠️<br>
+                                    <strong>15:30</strong> - NFP releases 📰<br>
+                                    <strong>Market spike:</strong> 100+ pips in seconds!<br>
+                                    <strong>Result:</strong> Positions hit stop-loss<br>
+                                    <strong>Risk:</strong> HIGH ⚠️⚠️⚠️
+                                </p>
+                            </div>
+                            
+                            <div style="background: rgba(0, 255, 136, 0.1); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--success);">
+                                <h5 style="color: var(--success); margin-bottom: 1rem;">✅ Full Version (With Filter)</h5>
+                                <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.7;">
+                                    <strong>15:00</strong> - Auto-trading STOPPED ✅<br>
+                                    <strong>15:30</strong> - NFP releases 📰<br>
+                                    <strong>Market spike:</strong> EA watching safely<br>
+                                    <strong>16:00</strong> - Trading RESUMED ✅<br>
+                                    <strong>Risk:</strong> PROTECTED 🛡️✅
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Monitored News Events -->
+                    <div style="background: var(--dark); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 1.5rem; text-align: center;">📰 High-Impact News Events Monitored</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <p style="color: var(--text); font-weight: 600;">💵 Non-Farm Payrolls</p>
+                                <p style="color: var(--text-dim); font-size: 0.85rem;">NFP (USD)</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <p style="color: var(--text); font-weight: 600;">🏛️ FOMC Decision</p>
+                                <p style="color: var(--text-dim); font-size: 0.85rem;">Interest Rates</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <p style="color: var(--text); font-weight: 600;">📊 GDP Reports</p>
+                                <p style="color: var(--text-dim); font-size: 0.85rem;">All Major Currencies</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <p style="color: var(--text); font-weight: 600;">💰 CPI Data</p>
+                                <p style="color: var(--text-dim); font-size: 0.85rem;">Inflation Reports</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <p style="color: var(--text); font-weight: 600;">🏦 Central Bank</p>
+                                <p style="color: var(--text-dim); font-size: 0.85rem;">ECB, BOE, BOJ</p>
+                            </div>
+                            <div style="background: var(--dark-elevated); padding: 1rem; border-radius: 8px; text-align: center;">
+                                <p style="color: var(--text); font-weight: 600;">📈 Employment</p>
+                                <p style="color: var(--text-dim); font-size: 0.85rem;">Jobless Claims</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Why This Matters -->
+                    <div style="background: rgba(0, 217, 255, 0.1); padding: 2rem; border-radius: 12px; border: 1px solid var(--primary);">
+                        <h4 style="color: var(--primary); margin-bottom: 1rem; text-align: center;">💎 Why This Feature is Worth the Upgrade</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                            <div>
+                                <p style="color: var(--success); font-weight: 600; margin-bottom: 0.5rem;">✅ Prevents Catastrophic Losses</p>
+                                <p style="color: var(--text-dim); font-size: 0.9rem;">News spikes can wipe out days of profits in seconds. This filter prevents that.</p>
+                            </div>
+                            <div>
+                                <p style="color: var(--success); font-weight: 600; margin-bottom: 0.5rem;">✅ Peace of Mind</p>
+                                <p style="color: var(--text-dim); font-size: 0.9rem;">Sleep well knowing your EA won't trade during dangerous market conditions.</p>
+                            </div>
+                            <div>
+                                <p style="color: var(--success); font-weight: 600; margin-bottom: 0.5rem;">✅ Professional Grade</p>
+                                <p style="color: var(--text-dim); font-size: 0.9rem;">Institutional-level risk management built right into the EA.</p>
+                            </div>
+                            <div>
+                                <p style="color: var(--success); font-weight: 600; margin-bottom: 0.5rem;">✅ Set and Forget</p>
+                                <p style="color: var(--text-dim); font-size: 0.9rem;">Fully automatic - no manual intervention required during news events.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Version Section -->
+    <section id="demo-version" class="features" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(0, 102, 255, 0.05)); padding: 4rem 0; margin: 4rem 0;">
+        <div class="container">
+            <h2 class="section-title">Try Before You Buy!</h2>
+            <p class="section-subtitle">Test our EAs risk-free with the FREE demo version</p>
+            
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <div class="feature-card" style="background: var(--dark-surface); border: 2px solid var(--primary); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; right: 0; background: var(--success); color: var(--dark); padding: 0.5rem 2rem; transform: rotate(45deg) translate(30%, -50%); font-weight: 700; font-size: 0.9rem;">FREE</div>
+                    
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="feature-icon" style="margin: 0 auto 1rem; width: 80px; height: 80px; font-size: 3rem;">🎁</div>
+                        <h3 style="font-size: 2rem; margin-bottom: 1rem; color: var(--primary);">FREE Demo Version Available</h3>
+                        <p style="color: var(--text); font-size: 1.2rem; margin-bottom: 0.5rem;">Test the Statistical Arbitrage EA completely risk-free on your demo account!</p>
+                        <p style="color: var(--text-dim); font-size: 1rem;">See exactly how it performs before purchasing the full combo package</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;">✅ What's Included in Demo:</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span><strong style="color: var(--text);">Statistical Arbitrage EA</strong> (correlation trading)</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>6 correlation pairs (3 positive + 3 negative)</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>Full functionality - all features work</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>Real-time z-score analysis & dashboard</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>Automatic broker suffix detection</span>
+                                </li>
+                                <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                                    <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                                    <span>Test with YOUR broker</span>
+                                </li>
+                            </ul>
+                            
+                            <div style="background: rgba(0, 217, 255, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1rem; border-left: 3px solid var(--primary);">
+                                <p style="color: var(--text); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem;">🎯 Full Version Includes:</p>
+                                <p style="color: var(--text-dim); font-size: 0.85rem;">
+                                    • <strong style="color: var(--success);">BOTH EAs</strong> (Statistical Arbitrage + Basket Take Profit)<br>
+                                    • All 29 correlation pairs<br>
+                                    • Works on LIVE accounts
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;">⚠️ Demo Restriction:</h4>
+                            <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--warning);">
+                                <p style="color: var(--warning); font-weight: 600; margin-bottom: 1rem;">Works ONLY on DEMO accounts</p>
+                                <p style="color: var(--text-dim); line-height: 1.8; font-size: 0.95rem;">
+                                    The demo version is designed for testing purposes only. It will NOT work on live/real trading accounts. 
+                                    This allows you to test everything risk-free with virtual money before purchasing the full version.
+                                </p>
+                            </div>
+                            
+                            <div style="background: rgba(0, 217, 255, 0.1); padding: 1.5rem; border-radius: 12px; margin-top: 1rem;">
+                                <p style="color: var(--success); font-weight: 600; margin-bottom: 0.5rem;">💡 Why Test Demo First?</p>
+                                <ul style="list-style: none; padding: 0; margin: 0;">
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">• See real trading results</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">• Verify broker compatibility</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">• Learn the settings</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">• Build confidence</li>
+                                    <li style="padding: 0.3rem 0; color: var(--text-dim); font-size: 0.9rem;">• Zero risk!</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--dark-elevated); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 1rem; text-align: center;">📊 Demo vs Full Version Comparison</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; text-align: center;">
+                            <div>
+                                <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.5rem;">Feature</p>
+                            </div>
+                            <div>
+                                <p style="color: var(--primary); font-weight: 600;">Demo</p>
+                            </div>
+                            <div>
+                                <p style="color: var(--success); font-weight: 600;">Full Version</p>
+                            </div>
+                            
+                            <div style="text-align: left; color: var(--text-dim); font-size: 0.9rem; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">Works on Demo</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">✅</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">✅</div>
+                            
+                            <div style="text-align: left; color: var(--text-dim); font-size: 0.9rem; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">Works on Live</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">❌</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1); color: var(--success);">✅</div>
+                            
+                            <div style="text-align: left; color: var(--text-dim); font-size: 0.9rem; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">EAs Included</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">1 EA only</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1); color: var(--success);">Both EAs</div>
+                            
+                            <div style="text-align: left; color: var(--text-dim); font-size: 0.9rem; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">Statistical Arbitrage</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">✅ (6 pairs)</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1); color: var(--success);">✅ (29 pairs)</div>
+                            
+                            <div style="text-align: left; color: var(--text-dim); font-size: 0.9rem; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">Basket Take Profit</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">❌</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1); color: var(--success);">✅</div>
+                            
+                            <div style="text-align: left; color: var(--text-dim); font-size: 0.9rem; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">All Features</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">✅</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">✅</div>
+                            
+                            <div style="text-align: left; color: var(--text-dim); font-size: 0.9rem; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">Price</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1); color: var(--success); font-weight: 700;">FREE</div>
+                            <div style="padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.1);">RM50-100</div>
+                        </div>
+                        
+                        <div style="background: rgba(255, 184, 0, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1.5rem; border-left: 3px solid var(--warning);">
+                            <p style="color: var(--warning); font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem;">⚡ Upgrade to Full Version:</p>
+                            <p style="color: var(--text-dim); font-size: 0.85rem;">
+                                Get BOTH EAs (Statistical Arbitrage + Basket Take Profit) with all 29 pairs for complete automation!
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <h4 style="color: var(--primary); margin-bottom: 1.5rem; font-size: 1.3rem;">🚀 Get Your FREE Demo Now!</h4>
+                        <p style="color: var(--text-dim); margin-bottom: 2rem;">Contact us to receive the demo version and start testing today</p>
+                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <a href="https://wa.me/6588193923?text=Hi!%20I%27d%20like%20to%20get%20the%20FREE%20demo%20version%20of%20the%20EAs" class="btn btn-primary" target="_blank">Get Demo via WhatsApp</a>
+                            <a href="https://t.me/AtamSuperro?text=Hi!%20I%27d%20like%20to%20get%20the%20FREE%20demo%20version" class="btn btn-secondary" target="_blank">Get Demo via Telegram</a>
+                        </div>
+                        <p style="color: var(--text-dim); margin-top: 1.5rem; font-size: 0.9rem; font-style: italic;">
+                            💬 We'll send you the demo file and installation instructions within 24 hours
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Options Section -->
+    <section id="payment-options" class="features" style="background: var(--dark-surface); padding: 4rem 0; margin: 4rem 0; border-radius: 40px;">
+        <div class="container">
+            <h2 class="section-title">Payment Options</h2>
+            <p class="section-subtitle">Choose your preferred payment method</p>
+            
+            <div class="features-grid">
+                <!-- Bank Transfer - PRIMARY -->
+                <div class="feature-card" style="text-align: center; border: 2px solid var(--primary); position: relative;">
+                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--primary); color: var(--dark); padding: 0.3rem 1rem; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">⭐ RECOMMENDED</div>
+                    <div class="feature-icon" style="margin: 1.5rem auto 1.5rem;">🏦</div>
+                    <h3>Bank Transfer</h3>
+                    <p style="color: var(--text-dim); margin-bottom: 1rem;">Fastest & easiest payment method</p>
+                    <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: left;">
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.5rem;">Bank Name:</p>
+                        <p style="color: var(--text); font-weight: 600; margin-bottom: 1rem;">Bank Islam Malaysia</p>
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.5rem;">Account Number:</p>
+                        <p style="color: var(--primary); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 1.1rem;">01135020162089</p>
+                    </div>
+                    <div style="background: rgba(0, 217, 255, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <p style="color: var(--success); font-weight: 600; font-size: 0.9rem;">✅ Instant Processing</p>
+                        <p style="color: var(--text-dim); font-size: 0.85rem;">Receive your EA within hours!</p>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-dim);">After payment, WhatsApp proof to<br><a href="https://wa.me/6588193923" style="color: var(--primary); font-weight: 600;" target="_blank">+65 8819 3923</a></p>
+                </div>
+                
+                <!-- USDT Payment - SECONDARY -->
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="margin: 0 auto 1.5rem;">₮</div>
+                    <h3>USDT (Crypto)</h3>
+                    <p style="color: var(--text-dim); margin-bottom: 1rem;">Pay with cryptocurrency</p>
+                    <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; text-align: left;">
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.5rem;">Network:</p>
+                        <p style="color: var(--warning); font-weight: 600; margin-bottom: 1rem;">TRX (Tron TRC20)</p>
+                        <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 0.5rem;">Wallet Address:</p>
+                        <p style="color: var(--primary); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; word-break: break-all; line-height: 1.4;">TMYySCmT3Bbedtt4Q47tH1hxwFH77F77yE</p>
+                    </div>
+                    <button onclick="copyUSDTAddress()" class="btn btn-secondary" style="display: inline-block; margin-bottom: 1rem;">📋 Copy Address</button>
+                    <p style="font-size: 0.85rem; color: var(--text-dim);">After payment, send transaction ID to<br><a href="https://wa.me/6588193923" style="color: var(--primary);" target="_blank">WhatsApp: +65 8819 3923</a></p>
+                </div>
+                
+                <!-- Shopee Payment - ALTERNATIVE -->
+                <div class="feature-card" style="text-align: center; opacity: 0.8;">
+                    <div class="feature-icon" style="margin: 0 auto 1.5rem;">🛒</div>
+                    <h3>Shopee (Alternative)</h3>
+                    <p style="color: var(--warning); margin-bottom: 1rem; font-weight: 600;">⚠️ May have delays</p>
+                    <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+                        <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6;">
+                            Note: Shopee virtual goods shipment may face approval delays. For faster service, use Bank Transfer or USDT.
+                        </p>
+                    </div>
+                    <a href="https://shopee.com.my/shop/14978533" class="btn btn-secondary" target="_blank" style="display: inline-block;">Visit Shopee Store</a>
+                    <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic;">Buyer protection included</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--dark-elevated); border-radius: 16px; border: 1px solid rgba(0, 217, 255, 0.2);">
+                <h4 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.2rem;">📝 After Payment</h4>
+                <p style="color: var(--text-dim); line-height: 1.8;">
+                    1. Send payment proof to WhatsApp: <a href="https://wa.me/6588193923" style="color: var(--primary);" target="_blank">+65 8819 3923</a><br>
+                    2. Include: Your MT5 Account Number (for RM50 EA) or Account Name (for RM100 EA)<br>
+                    3. Receive your EA within 24 hours (Bank Transfer: same day!)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Detail Section -->
+    <section class="features" style="background: var(--dark-surface); padding: 6rem 0; margin: 4rem 0; border-radius: 40px;">
+        <div class="container">
+            <h2 class="section-title">What You Get</h2>
+            <p class="section-subtitle">COMBO PACKAGE - Both Expert Advisors included in every purchase!</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 3rem; margin-top: 4rem;">
+                <!-- Statistical Arbitrage EA -->
+                <div style="background: var(--dark-elevated); padding: 3rem; border-radius: 24px; border: 1px solid rgba(0, 217, 255, 0.1);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                        <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">📊</div>
+                        <div>
+                            <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem;">Statistical Arbitrage EA</h3>
+                            <p style="color: var(--success); font-weight: 600; font-size: 1.1rem;">✅ Included in BOTH packages</p>
+                        </div>
+                    </div>
+                    
+                    <p style="color: var(--text-dim); margin-bottom: 2rem; line-height: 1.8;">
+                        Professional multi-pair correlation trading system that exploits statistical relationships between 29 carefully selected currency pairs, commodities, and cryptocurrencies. Based on proven hedge fund strategies.
+                    </p>
+                    
+                    <h4 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--primary);">Key Features:</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>29 optimized correlation pairs (18 positive, 11 negative)</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Real-time z-score analysis and hedge ratio calculation</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Continuous cycle trading - each pair operates independently</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Advanced risk management with configurable settings</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Licensed until February 28, 2026</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Basket Take Profit EA -->
+                <div style="background: var(--dark-elevated); padding: 3rem; border-radius: 24px; border: 1px solid rgba(0, 217, 255, 0.1);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                        <div style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🎯</div>
+                        <div>
+                            <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem;">Basket Take Profit EA</h3>
+                            <p style="color: var(--success); font-weight: 600; font-size: 1.1rem;">✅ Included in BOTH packages</p>
+                        </div>
+                    </div>
+                    
+                    <p style="color: var(--text-dim); margin-bottom: 2rem; line-height: 1.8;">
+                        The ultimate profit protection system that monitors ALL your open positions and automatically closes them at your target, with intelligent trailing stop technology that locks in gains while letting winners run.
+                    </p>
+                    
+                    <h4 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; color: var(--primary);">Key Features:</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Intelligent basket management - monitors entire portfolio</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Advanced trailing stop that never moves down</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Automatic profit protection with guaranteed minimum</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Real-time dashboard with visual progress indicators</span>
+                        </li>
+                        <li style="padding: 0.5rem 0; color: var(--text-dim); display: flex; align-items: start;">
+                            <span style="color: var(--success); margin-right: 0.8rem;">✓</span>
+                            <span>Unlimited daily cycles - set it and forget it</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem; padding: 2.5rem; background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(0, 102, 255, 0.1)); border-radius: 20px; border: 2px solid var(--primary);">
+                <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 1rem;">🎁 COMBO PACKAGE DEAL</h3>
+                <p style="color: var(--text); font-size: 1.2rem; line-height: 1.8;">
+                    <strong style="color: var(--success);">RM50</strong> = Both EAs (1 Account Number)<br>
+                    <strong style="color: var(--success);">RM100</strong> = Both EAs (Multiple Brokers - Same Name)<br>
+                    <span style="color: var(--warning); font-weight: 700; font-size: 1.3rem;">⚠️ Limited Time Until December 31, 2025!</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <div class="container">
+            <div class="pricing">
+                <h2 class="section-title">Elliott Wave EA - Our Featured Product</h2>
+                <p class="section-subtitle">Plus additional EAs for complete trading automation!</p>
+                
+                <div style="background: var(--warning); color: var(--dark); padding: 1rem 2rem; border-radius: 12px; text-align: center; font-weight: 700; margin-bottom: 3rem; animation: pulse 2s infinite;">
+                    ⚠️ LIMITED TIME OFFER - Valid Until End of December 2025! Price will change from RM to USD in January 2026!
+                </div>
+                
+                <div class="pricing-cards" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                    <!-- ELLIOTT WAVE - PRIMARY PRODUCT -->
+                    <div class="pricing-card featured" style="border: 3px solid var(--primary); transform: scale(1.08);">
+                        <div style="background: var(--gradient-primary); color: white; padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; margin-bottom: 1rem; font-weight: 700;">🌊 FEATURED - ELLIOTT WAVE</div>
+                        <h3 class="plan-name">Elliott Wave ABC Reversal</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
+                            <div>
+                                <div class="plan-price" style="font-size: 2rem;">RM50</div>
+                                <div class="plan-period" style="font-size: 0.8rem;">Account Lock</div>
+                            </div>
+                            <div>
+                                <div class="plan-price" style="font-size: 2rem;">RM100</div>
+                                <div class="plan-period" style="font-size: 0.8rem;">Name Lock</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                            <p style="color: var(--primary); font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;">🌊 Wave 3 Pattern Trading:</p>
+                            <p style="color: var(--text-dim); font-size: 0.9rem;">Catch the most powerful and profitable wave in any trend using proven Elliott Wave Theory</p>
+                        </div>
+                        
+                        <ul class="plan-features">
+                            <li>5-Wave Impulse Pattern Detection</li>
+                            <li>Focus on Wave 3 (Most Profitable)</li>
+                            <li>161.8% Fibonacci Extensions</li>
+                            <li>200 MA Trend Filter</li>
+                            <li>Dynamic Risk Management</li>
+                            <li>Works on All Timeframes</li>
+                            <li>Licensed Until Feb 2026</li>
+                            <li>Email Support Included</li>
+                        </ul>
+                        <a href="#payment-options" class="btn btn-primary" style="background: linear-gradient(135deg, #00D9FF 0%, #0066FF 100%); box-shadow: 0 10px 40px rgba(0, 217, 255, 0.4);">Get Elliott Wave EA</a>
+                    </div>
+                    
+                    <!-- COMBO PACKAGE - SECONDARY -->
+                    <div class="pricing-card featured">
+                        <div style="background: var(--success); color: var(--dark); padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; margin-bottom: 1rem; font-weight: 700;">🎁 COMBO PACKAGE</div>
+                        <h3 class="plan-name">Statistical Arbitrage + Basket TP</h3>
+                        <div class="plan-price">RM50</div>
+                        <div class="plan-period">Account Lock</div>
+                        
+                        <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                            <p style="color: var(--success); font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;">✅ You Get BOTH EAs:</p>
+                            <p style="color: var(--text); margin-bottom: 0.5rem;">1️⃣ Statistical Arbitrage EA</p>
+                            <p style="color: var(--text);">2️⃣ Basket Take Profit EA</p>
+                        </div>
+                        
+                        <ul class="plan-features">
+                            <li>Limited to 1 MT5 Account Number</li>
+                            <li>Works on 1 broker only</li>
+                            <li>Both EAs included in package</li>
+                            <li>29 Correlation Pairs (StatArb)</li>
+                            <li>Intelligent Profit Protection (Basket)</li>
+                            <li>Licensed Until Feb 2026</li>
+                            <li>Email Support Included</li>
+                        </ul>
+                        <a href="#payment-options" class="btn btn-primary">Get Combo Package</a>
+                    </div>
+                    
+                    <!-- COMBO MULTI-ACCOUNT -->
+                    <div class="pricing-card featured">
+                        <div style="background: var(--success); color: var(--dark); padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; margin-bottom: 1rem; font-weight: 700;">🎁 COMBO - MULTI-ACCOUNT</div>
+                        <h3 class="plan-name">Statistical Arbitrage + Basket TP</h3>
+                        <div class="plan-price">RM100</div>
+                        <div class="plan-period">Name Lock (Multi-Broker)</div>
+                        
+                        <div style="background: var(--dark); padding: 1.5rem; border-radius: 12px; margin: 1.5rem 0;">
+                            <p style="color: var(--success); font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;">✅ You Get BOTH EAs:</p>
+                            <p style="color: var(--text); margin-bottom: 0.5rem;">1️⃣ Statistical Arbitrage EA</p>
+                            <p style="color: var(--text); margin-bottom: 1rem;">2️⃣ Basket Take Profit EA</p>
+                            <p style="color: var(--primary); font-weight: 600;">🎯 Use on MULTIPLE brokers!</p>
+                        </div>
+                        
+                        <ul class="plan-features">
+                            <li>Use on Multiple Brokers</li>
+                            <li>Same MT5 Account Name Required</li>
+                            <li>Both EAs included in package</li>
+                            <li>Unlimited MT5 Accounts (same name)</li>
+                            <li>29 Correlation Pairs (StatArb)</li>
+                            <li>Intelligent Profit Protection (Basket)</li>
+                            <li>Licensed Until Feb 2026</li>
+                            <li>Priority Email Support</li>
+                        </ul>
+                        <a href="#payment-options" class="btn btn-primary">Get Multi-Account Package</a>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: var(--dark-elevated); border-radius: 16px; border: 2px solid var(--warning);">
+                    <h4 style="color: var(--warning); margin-bottom: 1rem; font-size: 1.3rem;">⏰ URGENT: Price Increase Coming January 2026!</h4>
+                    <p style="color: var(--text); line-height: 1.8; font-size: 1.1rem;">
+                        Current prices in <strong style="color: var(--primary);">Malaysian Ringgit (RM)</strong> are available only until <strong style="color: var(--warning);">December 31, 2025</strong>.<br>
+                        Starting January 2026, all prices will be in <strong style="color: var(--warning);">USD</strong> and will be significantly higher.<br>
+                        <strong style="color: var(--success); font-size: 1.2rem;">Lock in your RM price TODAY and save!</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Results Section -->
+    <section class="features" style="background: var(--dark-surface); padding: 4rem 0; margin: 4rem 0; border-radius: 40px;">
+        <div class="container">
+            <h2 class="section-title">📊 Verified Trading Results</h2>
+            <p class="section-subtitle">Real backtesting performance from Statistical Arbitrage EA</p>
+            
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div style="background: rgba(0, 255, 136, 0.1); padding: 2rem; border-radius: 16px; border: 2px solid var(--success); margin-bottom: 3rem; text-align: center;">
+                    <h3 style="color: var(--success); margin-bottom: 1rem; font-size: 1.5rem;">✅ 100% Real Backtesting Data</h3>
+                    <p style="color: var(--text); line-height: 1.8;">
+                        All results shown below are from actual MetaTrader 5 Strategy Tester backtests. These are not simulated or theoretical results - they represent how the EA performed on historical data with multiple correlation pairs simultaneously.
+                    </p>
+                </div>
+                
+                <!-- Performance Highlights -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                    <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; text-align: center; border: 2px solid var(--primary);">
+                        <div style="font-size: 2.5rem; color: var(--success); font-weight: 900; margin-bottom: 0.5rem;">+100%</div>
+                        <p style="color: var(--text-dim);">Average Return</p>
+                        <p style="color: var(--text); font-size: 0.85rem; margin-top: 0.5rem;">6 Pairs Trading</p>
+                    </div>
+                    <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; text-align: center; border: 2px solid var(--primary);">
+                        <div style="font-size: 2.5rem; color: var(--success); font-weight: 900; margin-bottom: 0.5rem;">Smooth</div>
+                        <p style="color: var(--text-dim);">Equity Curve</p>
+                        <p style="color: var(--text); font-size: 0.85rem; margin-top: 0.5rem;">Consistent Growth</p>
+                    </div>
+                    <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; text-align: center; border: 2px solid var(--primary);">
+                        <div style="font-size: 2.5rem; color: var(--success); font-weight: 900; margin-bottom: 0.5rem;">Multiple</div>
+                        <p style="color: var(--text-dim);">Pair Tests</p>
+                        <p style="color: var(--text); font-size: 0.85rem; margin-top: 0.5rem;">2-6 Correlation Pairs</p>
+                    </div>
+                    <div style="background: var(--dark-elevated); padding: 1.5rem; border-radius: 12px; text-align: center; border: 2px solid var(--primary);">
+                        <div style="font-size: 2.5rem; color: var(--success); font-weight: 900; margin-bottom: 0.5rem;">H1</div>
+                        <p style="color: var(--text-dim);">Timeframe</p>
+                        <p style="color: var(--text); font-size: 0.85rem; margin-top: 0.5rem;">1-Hour Charts</p>
+                    </div>
+                </div>
+                
+                <!-- Test Results Explanation -->
+                <div style="background: var(--dark); padding: 2rem; border-radius: 16px; margin-bottom: 3rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1.5rem; text-align: center;">📈 What These Results Show</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div>
+                            <h5 style="color: var(--success); margin-bottom: 1rem;">✅ Scalability Proven</h5>
+                            <p style="color: var(--text-dim); line-height: 1.8; font-size: 0.95rem;">
+                                Results shown with 2, 3, 4, 5, and 6 correlation pairs demonstrate that the EA scales effectively. 
+                                More pairs = more diversification and smoother equity curves.
+                            </p>
+                        </div>
+                        <div>
+                            <h5 style="color: var(--success); margin-bottom: 1rem;">✅ Consistent Performance</h5>
+                            <p style="color: var(--text-dim); line-height: 1.8; font-size: 0.95rem;">
+                                Notice the smooth, steady equity growth across all tests. This indicates the correlation strategy 
+                                works consistently regardless of the number of pairs being traded.
+                            </p>
+                        </div>
+                        <div>
+                            <h5 style="color: var(--success); margin-bottom: 1rem;">✅ Real Market Conditions</h5>
+                            <p style="color: var(--text-dim); line-height: 1.8; font-size: 0.95rem;">
+                                All backtests use actual historical tick data with realistic spreads and slippage. 
+                                These aren't optimized cherry-picked results - this is real performance data.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Results Note -->
+                <div style="background: rgba(255, 184, 0, 0.1); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--warning); margin-bottom: 2rem;">
+                    <h5 style="color: var(--warning); margin-bottom: 0.5rem; font-size: 1.1rem;">⚠️ Important Performance Disclosure</h5>
+                    <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.7;">
+                        These backtesting results are historical performance metrics and <strong>do not guarantee future results</strong>. 
+                        Past performance is not indicative of future returns. Trading forex involves substantial risk of loss. 
+                        The results shown represent optimal conditions and may not reflect typical user experience. 
+                        Always test on demo accounts before live trading and never risk more than you can afford to lose.
+                    </p>
+                </div>
+                
+                <!-- Contact for Full Results -->
+                <div style="text-align: center; background: var(--dark-elevated); padding: 2rem; border-radius: 16px; border: 2px solid var(--primary);">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem;">📊 Want to See Detailed Results?</h4>
+                    <p style="color: var(--text); margin-bottom: 1.5rem; line-height: 1.8;">
+                        Contact us via WhatsApp or Telegram for comprehensive backtest reports including:<br>
+                        • Detailed equity curves with drawdown analysis<br>
+                        • Trade-by-trade performance statistics<br>
+                        • Profit/loss distribution charts<br>
+                        • Time-based performance analytics
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="https://wa.me/6588193923?text=Hi!%20I%27d%20like%20to%20see%20the%20detailed%20backtesting%20results" class="btn btn-primary" target="_blank">Request Results via WhatsApp</a>
+                        <a href="https://t.me/AtamSuperro?text=Hi!%20I%27d%20like%20to%20see%20the%20detailed%20backtesting%20results" class="btn btn-secondary" target="_blank">Request via Telegram</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Our Traders Say</h2>
+            <p class="section-subtitle">Join satisfied traders using our Expert Advisors</p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The Statistical Arbitrage EA transformed my trading. The correlation analysis is spot-on and I love that it trades multiple pairs independently. Consistent profits every week!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JD</div>
+                        <div class="author-info">
+                            <h4>John Davis</h4>
+                            <p>Professional Trader</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"The Basket Take Profit EA saved my trading career. I was hitting good profits then giving them back. Now I lock in gains automatically every day. Best investment ever!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SC</div>
+                        <div class="author-info">
+                            <h4>Sarah Chen</h4>
+                            <p>Forex Investor</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Setup was incredibly easy for both EAs. The trailing stop feature is genius - captured RM250 profit when market reversed. Without it, I would have gotten nothing!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <h4>Michael Roberts</h4>
+                            <p>Algorithmic Trader</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information Section -->
+    <section id="contact-info" class="features" style="padding: 4rem 0;">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <p class="section-subtitle">Have questions? Contact us for enquiries and support</p>
+            
+            <div class="features-grid" style="max-width: 900px; margin: 3rem auto;">
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="margin: 0 auto 1.5rem;">💬</div>
+                    <h3>WhatsApp</h3>
+                    <p style="margin-bottom: 1.5rem;">Direct message for instant support</p>
+                    <a href="https://wa.me/6588193923" class="btn btn-primary" target="_blank" style="display: inline-block;">+65 8819 3923</a>
+                </div>
+                
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="margin: 0 auto 1.5rem;">📱</div>
+                    <h3>Telegram Personal</h3>
+                    <p style="margin-bottom: 1.5rem;">Message me directly for enquiries</p>
+                    <a href="https://t.me/AtamSuperro" class="btn btn-primary" target="_blank" style="display: inline-block;">@AtamSuperro</a>
+                </div>
+                
+                <div class="feature-card" style="text-align: center;">
+                    <div class="feature-icon" style="margin: 0 auto 1.5rem;">👥</div>
+                    <h3>Telegram Group</h3>
+                    <p style="margin-bottom: 1.5rem;">Join our community of traders</p>
+                    <a href="https://t.me/Free_EA_ASuper" class="btn btn-secondary" target="_blank" style="display: inline-block;">Join Public Group</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Automate Your Trading?</h2>
+            <p>Get BOTH EAs in our combo package - Pay via Bank Transfer for fastest delivery!</p>
+            <a href="#payment-options" class="btn btn-primary">Choose Payment Method</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AtamSuper EA</h3>
+                    <p>Professional automated trading solutions for modern traders.</p>
+                    <div class="social-links">
+                        <a href="https://t.me/Free_EA_AtamSuper" target="_blank" title="Telegram Channel">📱</a>
+                        <a href="https://shopee.com.my/shop/14978533" target="_blank" title="Shopee">🛒</a>
+                        <a href="https://wa.me/6588193923" target="_blank" title="WhatsApp">💬</a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><a href="https://wa.me/6588193923" target="_blank">WhatsApp: +65 8819 3923</a></li>
+                        <li><a href="https://t.me/AtamSuperro" target="_blank">Telegram: @AtamSuperro</a></li>
+                        <li><a href="https://t.me/Free_EA_ASuper" target="_blank">Join Public Group</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Product</h3>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="https://t.me/Free_EA_ASuper" target="_blank">Telegram Public Group</a></li>
+                        <li><a href="https://wa.me/6588193923" target="_blank">WhatsApp Support</a></li>
+                        <li><a href="https://t.me/AtamSuperro" target="_blank">Direct Message</a></li>
+                        <li><a href="#pricing">Product Information</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Risk Disclaimer</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 AtamSuper EA. All rights reserved. Trading involves risk and may not be suitable for all investors.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Copy USDT address function
+        function copyUSDTAddress() {
+            const address = 'TMYySCmT3Bbedtt4Q47tH1hxwFH77F77yE';
+            navigator.clipboard.writeText(address).then(function() {
+                alert('✅ USDT Address Copied!\n\n' + address + '\n\nNetwork: TRX (Tron TRC20)');
+            }, function(err) {
+                // Fallback for older browsers
+                const textArea = document.createElement("textarea");
+                textArea.value = address;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ USDT Address Copied!\n\n' + address + '\n\nNetwork: TRX (Tron TRC20)');
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        let lastScroll = 0;
+        const header = document.querySelector('header');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.style.background = 'rgba(10, 14, 26, 0.95)';
+            } else {
+                header.style.background = 'rgba(10, 14, 26, 0.8)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .pricing-card, .testimonial-card, .stat-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
